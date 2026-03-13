@@ -1,26 +1,16 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0',
-    port: 5173,
-    strictPort: true,
     watch: {
       usePolling: true,
-      interval: 300,
     },
-    hmr: {
-      host: 'localhost',
-      clientPort: 5173,
-    },
-  },
-  preview: {
-    host: '0.0.0.0',
-    port: 4173,
+    host: true, // Needed for Docker container port mapping to work
     strictPort: true,
+    port: 5173,
   },
   test: {
     environment: 'jsdom',

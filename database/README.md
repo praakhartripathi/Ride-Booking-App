@@ -3,7 +3,7 @@
 This module contains the raw SQL scripts and mock data generation files for the application's MySQL 8.0 instance.
 
 ## 💾 Core Infrastructure (MySQL 8.0)
-The database structure is primarily built for an Uber-like ride-booking or delivery platform.
+The database structure is primarily built for a QRide-like ride-booking or delivery platform.
 
 ## 🗃️ Key Files
 1. **`schema.sql`**: Contains the complete schema creation syntax. Use this to quickly spin up instances if not using Flyway.

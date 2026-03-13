@@ -29,14 +29,6 @@
 
   a {
     color: inherit;
-    text-decoration: underline;
-  }
-  
-  /* Remove underlines only for links that should not have them */
-  a.no-underline,
-  .nav a,
-  .btn a,
-  .menu a {
     text-decoration: none;
   }
 
