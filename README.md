@@ -1,171 +1,88 @@
-Ride Booking App – Spring Boot + React + MySQL + Docker Task List
+# Ride Booking App
 
-1. Project Setup
+Ride Booking App is a full-stack project built with React, Spring Boot, MySQL, and Docker. The repository is structured for local development with hot reload and for GitHub-based CI/CD.
 
-* Create project structure
-* Backend: Spring Boot project (Spring Initializr)
-* Frontend: React project (Vite or CRA)
-* Setup Git repository
-* Create environment configuration files
+## Modules
 
-2. Backend Setup (Spring Boot)
+- [backend/README.md](./backend/README.md)
+- [database/README.md](./database/README.md)
+- [frontend/README.md](./frontend/README.md)
 
-* Add dependencies:
+## Branch Strategy
 
-  * Spring Web
-  * Spring Data JPA
-  * Spring Security
-  * MySQL Driver
-  * Lombok
-  * JWT library
-* Configure application.properties
-* Setup MySQL database connection
-* Test server running on port
+- `main`: production-ready branch
+- `feature_fe`: frontend work
+- `feature_be`: backend work
+- `feature_db`: database work
 
-3. Database Design
+Merge changes through Pull Requests. A PR template is included at [.github/pull_request_template.md](./.github/pull_request_template.md).
 
-* Create User table
-* Create Captain table
-* Create Ride table
-* Define relationships
-* Configure JPA entities
+## Local Development
 
-4. User Authentication
+Start the full stack with Docker Compose:
 
-* Create User entity
-* Create UserRepository
-* Create UserService
-* Implement user registration API
-* Implement user login API
-* Encrypt password using BCrypt
-* Generate JWT token
+```bash
+docker compose up --build
+```
 
-5. User Profile & Logout
+Services:
 
-* Create profile endpoint
-* Implement AuthUser filter (JWT filter)
-* Secure APIs using Spring Security
-* Implement logout functionality
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend: [http://localhost:8080](http://localhost:8080)
+- MySQL: `localhost:3307`
 
-6. Captain Authentication
+Frontend changes reload through Vite HMR inside the `ride_frontend` container. Backend changes continue to use the Spring Boot dev container and DevTools flow.
 
-* Create Captain entity
-* Create CaptainRepository
-* Create CaptainService
-* Implement captain register API
-* Implement captain login API
-* Secure captain endpoints
+## Quality Gates
 
-7. Frontend Setup (React)
+Frontend:
 
-* Setup project structure
-* Install dependencies
+```bash
+cd frontend
+npm install
+npm run lint
+npm run test
+npm run build
+```
 
-  * React Router
-  * Axios
-  * Tailwind / CSS
-* Create routes for pages
-* Setup API service
+Backend:
 
-8. User Forms
+```bash
+cd backend
+./mvnw clean verify
+```
 
-* Create User Register form
-* Create User Login form
-* Validate input fields
-* Store JWT token after login
+The backend Maven build now runs Checkstyle and SpotBugs during `verify`.
 
-9. Captain Forms
+## Docker
 
-* Create Captain Register form
-* Create Captain Login form
-* Handle authentication state
+Build images locally:
 
-10. Integrate User APIs
+```bash
+docker build -t rideapp-frontend ./frontend
+docker build -t rideapp-backend ./backend
+```
 
-* Connect register API
-* Connect login API
-* Save token in localStorage
-* Protect user routes
+Use `docker compose config` to validate the compose file before startup or deployment.
 
-11. Integrate Captain APIs
+## GitHub Automation
 
-* Connect captain register API
-* Connect captain login API
-* Manage captain authentication state
+The repository now includes:
 
-12. User Home UI
+- CI workflow at [.github/workflows/ci.yml](./.github/workflows/ci.yml)
+- Deploy workflow at [.github/workflows/deploy.yml](./.github/workflows/deploy.yml)
+- Issue templates at [.github/ISSUE_TEMPLATE](./.github/ISSUE_TEMPLATE)
 
-* Create User Home page
-* Add pickup location input
-* Add destination input
-* Add ride search button
+The deploy workflow builds and publishes frontend/backend images to GHCR. Remote deployment requires repository secrets for the target servers and compose file paths.
 
-13. Location Search Panel
+## Rollback
 
-* Create suggestion dropdown
-* Fetch location suggestions
-* Select pickup and destination
+If a deployment fails:
 
-14. Complete User Home UI
+```bash
+docker compose down
+docker pull <previous-stable-image>
+docker compose up -d
+```
 
-* Show ride options
-* Display distance and time
-* Confirm ride request
-
-15. Captain Dashboard
-
-* Create Captain Home screen
-* Display ride requests
-* Accept ride functionality
-
-16. Google Maps Integration
-
-* Enable Google Maps API
-* Setup API keys
-* Display map in frontend
-* Show route between pickup and destination
-
-17. Location Services (Backend)
-
-* Create API for location suggestions
-* Create getCoordinates endpoint
-* Create distance & time calculation endpoint
-
-18. Ride System
-
-* Create Ride entity
-* Create RideRepository
-* Create RideService
-* Create ride request API
-* Assign captain to ride
-* Manage ride status
-
-19. Final Integration
-
-* User sends ride request
-* Backend processes ride
-* Captain receives ride request
-* Captain accepts ride
-* Update ride status
-
-20. Docker Setup
-
-* Create Dockerfile for Spring Boot
-* Create Dockerfile for React
-* Create docker-compose.yml
-* Setup MySQL container
-* Run full project using Docker
-
-21. Testing
-
-* Test authentication APIs
-* Test ride booking flow
-* Test captain ride acceptance
-* Fix bugs
-
-22. Deployment Preparation
-
-* Clean code
-* Add README
-* Document APIs
-* Prepare project for deployment
+Keep previous image tags in GHCR or your registry so you can pin the last stable release quickly.

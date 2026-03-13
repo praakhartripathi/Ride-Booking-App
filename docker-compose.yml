@@ -1,7 +1,4 @@
-version: "3.8"
-
 services:
-
   mysql:
     image: mysql:8.0
     container_name: ride_mysql
@@ -15,6 +12,12 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   backend:
     build:
@@ -22,17 +25,37 @@ services:
       dockerfile: Dockerfile.dev
     container_name: ride_backend
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8080:8080"
-      - "35729:35729" # LiveReload port
+      - "35729:35729"
     volumes:
       - ./backend:/app
-      - ~/.m2:/root/.m2 # Cache maven dependencies
+      - ~/.m2:/root/.m2
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ride_db
       SPRING_DATASOURCE_USERNAME: ride_user
       SPRING_DATASOURCE_PASSWORD: ride_pass
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: ride_frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      VITE_API_BASE_URL: http://backend:8080
+    command: npm run dev
 
 volumes:
   mysql_data:

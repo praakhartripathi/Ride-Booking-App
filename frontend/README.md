@@ -1,16 +1,31 @@
-# React + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend uses React, TypeScript, Vite, Tailwind CSS 3, ESLint, and Vitest.
 
-Currently, two official plugins are available:
+## Commands
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+npm run lint
+npm run test
+npm run build
+```
 
-## React Compiler
+## Docker Dev Mode
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The Docker setup uses the `dev` target in [frontend/Dockerfile](./Dockerfile) and runs Vite on port `5173`.
 
-## Expanding the ESLint configuration
+```bash
+docker compose up --build frontend
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Source files are bind-mounted into the container and Vite polling is enabled, so frontend changes trigger hot reload without restarting Docker.
+
+## Production Image
+
+The production image builds the static app and serves it through Nginx:
+
+```bash
+docker build -t rideapp-frontend .
+```

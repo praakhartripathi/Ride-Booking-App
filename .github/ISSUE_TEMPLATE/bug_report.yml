@@ -1,0 +1,49 @@
+name: Bug report
+description: Report a defect in the ride-booking app.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the bug and the affected area.
+      placeholder: Frontend login form fails to submit after entering OTP.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include exact steps, data, and environment.
+      placeholder: |
+        1. Start docker compose
+        2. Open /login
+        3. Enter valid credentials
+        4. Observe the error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - frontend
+        - backend
+        - database
+        - docker
+        - ci-cd
+    validations:
+      required: true
