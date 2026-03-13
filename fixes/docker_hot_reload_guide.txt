@@ -1,0 +1,31 @@
+# How to use Docker Hot Reload
+
+We have updated the Docker configuration so you don't need to rebuild the image every time you make a change in the Java code!
+
+## 1. Start the Docker Container
+Instead of using the standard `Dockerfile` (which builds a static `app.jar`), the `docker-compose.yml` is now pointing to `Dockerfile.dev`. 
+
+Run backend in the background:
+```bash
+docker-compose up -d backend
+```
+
+## 2. How Hot Reloading Works
+Because of these lines in `docker-compose.yml`:
+```yaml
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+```
+Your local Mac folder `/Users/prakhartripathi/Documents/src/Ride-Booking-App/backend` is directly mirrored (mounted) into the Docker container's `/app` folder.
+
+1. When you edit and save a Java file (e.g. adding a new endpoint in `AuthController.java`).
+2. Make sure you trigger a **Recompile** in your IDE (IntelliJ: `Cmd + F9` or `Build Project`, VSCode: usually automatic if Java extension is active, or run `./mvnw compile`).
+3. Spring Boot DevTools (which we enabled in `pom.xml`) will detect the `.class` file change inside the `target` folder.
+4. It will immediately and automatically restart the Spring Application Context *inside* the Docker container in 1-2 seconds without restarting the whole container!
+
+## 3. Viewing Logs
+To see the hot reloads happening in real-time, just follow the logs:
+```bash
+docker-compose logs -f backend
+```

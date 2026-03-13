@@ -17,12 +17,18 @@ services:
       - mysql_data:/var/lib/mysql
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     container_name: ride_backend
     depends_on:
       - mysql
     ports:
       - "8080:8080"
+      - "35729:35729" # LiveReload port
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2 # Cache maven dependencies
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ride_db
       SPRING_DATASOURCE_USERNAME: ride_user

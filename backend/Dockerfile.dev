@@ -1,0 +1,10 @@
+# Use Maven image with JDK for development (allows hot reload)
+FROM maven:3.9.6-eclipse-temurin-17 AS dev
+
+WORKDIR /app
+
+# We mount the source code via docker-compose instead of copying it
+# This allows the host machine's changes to reflect immediately inside the container
+
+# The command to run Spring Boot with devtools enabled
+ENTRYPOINT ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]

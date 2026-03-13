@@ -1,0 +1,17 @@
+# Fix: Unsupported Database MySQL 8.0 (Flyway)
+
+**Error:**
+`org.flywaydb.core.FlywayException: Unsupported Database: MySQL 8.0`
+
+**Cause:**
+Starting with Flyway version 9.x, support for specific databases (like MySQL) was extracted from the `flyway-core` module into dedicated database-specific modules. This reduces the size of the core library.
+
+**Solution:**
+We must include the `flyway-mysql` dependency in our `pom.xml` alongside `flyway-core` so that Flyway can connect to and understand MySQL 8 dialects.
+
+```xml
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-mysql</artifactId>
+</dependency>
+```
