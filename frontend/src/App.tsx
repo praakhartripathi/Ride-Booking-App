@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { ExploreSection } from './components/ExploreSection'
+import { HomeSections } from './components/HomeSections'
 import { Navbar } from './components/Navbar'
 import { RideHero } from './components/RideHero'
 
@@ -120,6 +122,8 @@ function App() {
         onSignupClick={() => setMode('signup')}
       />
       <RideHero rideTabs={rideTabs} />
+      <ExploreSection />
+      <HomeSections />
 
       <section className="border-t border-black/10 bg-white">
         <div className="mx-auto grid w-full max-w-[1280px] gap-10 px-5 py-10 md:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">

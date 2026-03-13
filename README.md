@@ -2,11 +2,21 @@
 
 Ride Booking App is a full-stack project built with React, Spring Boot, MySQL, and Docker. The repository is structured for local development with hot reload and for GitHub-based CI/CD.
 
+The application branding in the UI uses `QRide`.
+
 ## Modules
 
 - [backend/README.md](./backend/README.md)
 - [database/README.md](./database/README.md)
 - [frontend/README.md](./frontend/README.md)
+
+Backend domain modules currently included:
+
+- `auth`: registration, login, JWT security
+- `userprofile`: profile management and profile picture upload
+- `ride`: rider trip requests and ride lifecycle actions
+- `driver`: driver profile management and availability
+- `location`: city/state autocomplete search API for pickup and dropoff fields
 
 ## Branch Strategy
 
@@ -33,6 +43,13 @@ Services:
 
 Frontend changes reload through Vite HMR inside the `ride_frontend` container. Backend changes continue to use the Spring Boot dev container and DevTools flow.
 
+The frontend now includes:
+
+- A QRide navbar and ride-request hero section
+- A post-hero "Explore what you can do with QRide" section
+- Login and signup forms connected to Spring Boot auth APIs
+- Pickup and dropoff autocomplete backed by the location module
+
 ## Quality Gates
 
 Frontend:
@@ -53,6 +70,16 @@ cd backend
 ```
 
 The backend Maven build now runs Checkstyle and SpotBugs during `verify`.
+
+Useful backend APIs:
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/locations/search?q=<query>`
+- `POST /api/rides`
+- `GET /api/rides/me`
+- `PUT /api/drivers/me`
+- `PATCH /api/drivers/me/availability`
 
 ## Docker
 

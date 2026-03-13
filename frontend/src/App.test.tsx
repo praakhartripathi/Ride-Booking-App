@@ -3,12 +3,17 @@ import { describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('App', () => {
-  it('renders the qride navbar and auth actions', () => {
+  it('renders the qride homepage flow', () => {
     render(<App />)
 
-    expect(screen.getByRole('link', { name: /qride/i })).toBeInTheDocument()
+    expect(screen.getByRole('banner')).toBeInTheDocument()
+    expect(screen.getByText('QRide')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: /go anywhere with qride/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByText(/plan for later/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: /frequently asked questions/i }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /sign up for qride/i }),

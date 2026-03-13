@@ -11,6 +11,8 @@ export function RideHero({ rideTabs }: RideHeroProps) {
   const [selectedOption, setSelectedOption] = useState('Pickup now')
   const [pickupLocation, setPickupLocation] = useState('')
   const [dropoffLocation, setDropoffLocation] = useState('')
+  const [city, setCity] = useState('IN')
+  const [isEditingCity, setIsEditingCity] = useState(false)
 
   return (
     <>
@@ -43,10 +45,23 @@ export function RideHero({ rideTabs }: RideHeroProps) {
             <div className="space-y-6">
               <p className="flex items-center gap-2 text-[1.05rem] text-black">
                 <span className="text-lg">•</span>
-                <span>IN</span>
-                <a className="underline decoration-black underline-offset-4" href="/">
-                  Change city
-                </a>
+                {isEditingCity ? (
+                  <input
+                    className="w-24 bg-transparent outline-none"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    autoFocus
+                  />
+                ) : (
+                  <span>{city}</span>
+                )}
+                <button
+                  className="underline decoration-black underline-offset-4"
+                  type="button"
+                  onClick={() => setIsEditingCity(!isEditingCity)}
+                >
+                  {isEditingCity ? 'Done' : 'Change city'}
+                </button>
               </p>
               <h2 className="max-w-[12ch] text-5xl font-semibold tracking-[-0.05em] text-black md:text-7xl">
                 Request a ride for now or later
