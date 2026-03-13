@@ -85,21 +85,8 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional
     public void logout(String authHeader, LogoutRequest request) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String accessToken = authHeader.substring(7);
-            // Optionally: Implement an external access token denylist (e.g., Redis)
-        }
-
-        if (request.getRefreshToken() != null) {
-            // Usually, you lookup the refresh token in the repository,
-            // verify it belongs to the user, and revoke/delete it.
-            // refreshTokenRepository.findByToken(request.getRefreshToken()).ifPresent(token -> {
-            //     token.setRevokedAt(LocalDateTime.now());
-            //     refreshTokenRepository.save(token);
-            // });
-        }
+        throw new UnsupportedOperationException("Logout not yet implemented. Token invalidation via denylist or refresh token revocation needs to be implemented.");
     }
 
     private AuthResponse mapToDto(User user, String accessToken, String refreshToken) {

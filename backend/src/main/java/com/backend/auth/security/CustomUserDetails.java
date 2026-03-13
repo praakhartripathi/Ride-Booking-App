@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -16,6 +17,12 @@ public class CustomUserDetails implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("User role cannot be null");
+        }
         this.user = user;
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
@@ -26,11 +33,15 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getFirstName() {
-        return user.getProfile() != null ? user.getProfile().getFirstName() : "";
+        return Optional.ofNullable(user.getProfile())
+                .map(profile -> Optional.ofNullable(profile.getFirstName()).orElse(""))
+                .orElse("");
     }
 
     public String getLastName() {
-        return user.getProfile() != null ? user.getProfile().getLastName() : "";
+        return Optional.ofNullable(user.getProfile())
+                .map(profile -> Optional.ofNullable(profile.getLastName()).orElse(""))
+                .orElse("");
     }
 
     @Override

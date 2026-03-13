@@ -13,5 +13,8 @@ We must include the `flyway-mysql` dependency in our `pom.xml` alongside `flyway
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-mysql</artifactId>
+    <version>${flyway.version}</version>
 </dependency>
 ```
+
+**Note:** Keep the `flyway-mysql` and `flyway-core` versions in sync. If your project uses a parent POM with dependencyManagement, the version may be inherited automatically. Otherwise, explicitly match the version of `flyway-mysql` to your `flyway-core` version.

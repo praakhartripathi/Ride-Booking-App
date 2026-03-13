@@ -5,7 +5,7 @@ This module contains the Spring Boot 3 REST API for the application, built with 
 ## 🚀 Built With
 - **Java 17** & **Spring Boot 3.2.x**
 - **Spring Security** (Stateless Bearer Tokens)
-- **JSON Web Tokens (JJWT)** (HS256 encryption)
+- **JSON Web Tokens (JWT)** using the JJWT library with HS256 signing (HMAC-SHA256)
 - **Spring Data JPA** (Hibernate)
 - **Flyway** (Database Migrations)
 - **Lombok** (Code reduction)
@@ -36,7 +36,7 @@ However, if you wish to run it natively via Maven:
 ./mvnw spring-boot:run
 ```
 
-*(Note: Ensure you have a standard MySQL instance running locally on port `3306` with `ride_db` if you choose not to use Docker).*
+*(Note: If using docker-compose, the MySQL database is exposed on port `3307`. If running the backend natively without Docker, ensure you have a standard MySQL instance running locally on port `3306` with the database `ride_db`).)*
 
 ## 🧪 Testing Endpoints
 Refer to `API_TESTING.md` in this directory for exact cURL requests.

@@ -31,14 +31,23 @@ public class UserProfileService {
             user.getProfile().setUser(user);
         }
 
-        if (request.getFirstName() != null && !request.getFirstName().trim().isEmpty()) {
-            user.getProfile().setFirstName(request.getFirstName());
+        if (request.getFirstName() != null) {
+            String firstName = request.getFirstName().trim();
+            if (!firstName.isEmpty()) {
+                user.getProfile().setFirstName(firstName);
+            }
         }
-        if (request.getLastName() != null && !request.getLastName().trim().isEmpty()) {
-            user.getProfile().setLastName(request.getLastName());
+        if (request.getLastName() != null) {
+            String lastName = request.getLastName().trim();
+            if (!lastName.isEmpty()) {
+                user.getProfile().setLastName(lastName);
+            }
         }
-        if (request.getProfilePictureUrl() != null && !request.getProfilePictureUrl().trim().isEmpty()) {
-            user.getProfile().setProfilePictureUrl(request.getProfilePictureUrl());
+        if (request.getProfilePictureUrl() != null) {
+            String profilePictureUrl = request.getProfilePictureUrl().trim();
+            if (!profilePictureUrl.isEmpty()) {
+                user.getProfile().setProfilePictureUrl(profilePictureUrl);
+            }
         }
 
         // The @Transactional annotation ensures changes are saved to the database.
@@ -70,6 +79,18 @@ public class UserProfileService {
         if (file.isEmpty()) {
             throw new RuntimeException("Failed to store empty file.");
         }
+        
+        // Validate file size (max 5MB)
+        final long MAX_PROFILE_PIC_BYTES = 5 * 1024 * 1024;
+        if (file.getSize() > MAX_PROFILE_PIC_BYTES) {
+            throw new RuntimeException("File size exceeds 5MB limit.");
+        }
+        
+        // Validate file type
+        String contentType = file.getContentType();
+        if (contentType == null || !(contentType.equals("image/jpeg") || contentType.equals("image/png"))) {
+            throw new RuntimeException("Only JPEG and PNG images are allowed.");
+        }
 
         try {
             // Ensure uploads directory exists
@@ -78,11 +99,15 @@ public class UserProfileService {
                 java.nio.file.Files.createDirectories(uploadDir);
             }
 
-            // Generate unique filename
+            // Generate unique filename with validation
             String originalFilename = file.getOriginalFilename();
             String extension = "";
             if (originalFilename != null && originalFilename.lastIndexOf(".") > 0) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                extension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+                // Whitelist allowed extensions
+                if (!extension.matches("\\.(jpg|jpeg|png|gif)$")) {
+                    throw new RuntimeException("Invalid file extension. Only .jpg, .jpeg, .png, and .gif are allowed.");
+                }
             }
             String newFilename = java.util.UUID.randomUUID().toString() + extension;
 
@@ -102,7 +127,7 @@ public class UserProfileService {
     }
 
     @Transactional
-    public void deleteProfile(String email) {
+    public void deleteAccount(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         

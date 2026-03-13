@@ -17,7 +17,7 @@ Because of these lines in `docker-compose.yml`:
       - ./backend:/app
       - ~/.m2:/root/.m2
 ```
-Your local Mac folder `/Users/prakhartripathi/Documents/src/Ride-Booking-App/backend` is directly mirrored (mounted) into the Docker container's `/app` folder.
+Your local Mac folder `${PROJECT_ROOT}/backend` is directly mirrored (mounted) into the Docker container's `/app` folder.
 
 1. When you edit and save a Java file (e.g. adding a new endpoint in `AuthController.java`).
 2. Make sure you trigger a **Recompile** in your IDE (IntelliJ: `Cmd + F9` or `Build Project`, VSCode: usually automatic if Java extension is active, or run `./mvnw compile`).

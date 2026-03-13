@@ -19,7 +19,7 @@ INSERT INTO user_profiles (user_id, first_name, last_name, profile_picture_url) 
 
 -- 3. Insert mock verification codes (e.g., for email verification)
 INSERT INTO verification_codes (user_id, identifier, code, type, expires_at) VALUES
-(1, 'alice.rider@example.com', '123456', 'EMAIL_VERIFICATION', DATE_ADD(NOW(), INTERVAL 15 MINUTE));
+(1, 'rider@example.com', '123456', 'EMAIL_VERIFICATION', DATE_ADD(NOW(), INTERVAL 15 MINUTE));
 
 -- Insert sample active refresh token
 INSERT INTO refresh_tokens (user_id, token, device_info, ip_address, expires_at) VALUES

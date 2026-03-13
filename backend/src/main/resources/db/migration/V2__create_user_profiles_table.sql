@@ -10,7 +10,7 @@ CREATE TABLE user_profiles (
 
 -- 2. Migrate existing data from users to user_profiles
 INSERT INTO user_profiles (user_id, first_name, last_name, profile_picture_url)
-SELECT id, first_name, last_name, profile_picture_url FROM users;
+SELECT id, COALESCE(first_name, ''), COALESCE(last_name, ''), profile_picture_url FROM users;
 
 -- 3. Drop the columns from the users table safely
 ALTER TABLE users 

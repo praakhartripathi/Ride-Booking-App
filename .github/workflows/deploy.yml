@@ -49,35 +49,55 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
 
   deploy-staging:
-    if: github.event_name == 'push' && secrets.STAGING_SSH_HOST != ''
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: publish
     environment: staging
+    env:
+      STAGING_SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+      FRONTEND_TAG: ${{ github.sha }}
+      BACKEND_TAG: ${{ github.sha }}
     steps:
+      - name: Check staging secrets
+        if: env.STAGING_SSH_HOST == ''
+        run: |
+          echo "Error: STAGING_SSH_HOST secret is not set"
+          exit 1
       - uses: appleboy/ssh-action@v1.2.2
+        if: env.STAGING_SSH_HOST != ''
         with:
           host: ${{ secrets.STAGING_SSH_HOST }}
           username: ${{ secrets.STAGING_SSH_USER }}
           key: ${{ secrets.STAGING_SSH_KEY }}
           script: |
-            docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
-            docker pull ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
-            docker compose -f ${{ secrets.STAGING_COMPOSE_PATH }} up -d
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+            docker pull ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            docker pull ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            docker compose -f ${{ secrets.STAGING_COMPOSE_PATH }} pull && docker compose -f ${{ secrets.STAGING_COMPOSE_PATH }} up -d --force-recreate --renew-anon-volumes
 
   deploy-production:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production' && secrets.PRODUCTION_SSH_HOST != ''
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production'
     runs-on: ubuntu-latest
     needs: publish
     environment: production
+    env:
+      PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+      FRONTEND_TAG: ${{ github.sha }}
+      BACKEND_TAG: ${{ github.sha }}
     steps:
+      - name: Check production secrets
+        if: env.PRODUCTION_SSH_HOST == ''
+        run: |
+          echo "Error: PRODUCTION_SSH_HOST secret is not set"
+          exit 1
       - uses: appleboy/ssh-action@v1.2.2
+        if: env.PRODUCTION_SSH_HOST != ''
         with:
           host: ${{ secrets.PRODUCTION_SSH_HOST }}
           username: ${{ secrets.PRODUCTION_SSH_USER }}
           key: ${{ secrets.PRODUCTION_SSH_KEY }}
           script: |
-            docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
-            docker pull ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
-            docker compose -f ${{ secrets.PRODUCTION_COMPOSE_PATH }} up -d
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+            docker pull ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            docker pull ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            docker compose -f ${{ secrets.PRODUCTION_COMPOSE_PATH }} pull && docker compose -f ${{ secrets.PRODUCTION_COMPOSE_PATH }} up -d --force-recreate --renew-anon-volumes
