@@ -63,6 +63,14 @@ public class RideService {
     }
 
     @Transactional(readOnly = true)
+    public List<RideResponse> getOpenRides() {
+        return rideRepository.findByStatusOrderByCreatedAtDesc(RideStatus.REQUESTED)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public RideResponse getRideById(String email, Long rideId) {
         User currentUser = getUserByEmail(email);
         Ride ride = getRideEntityById(rideId);
