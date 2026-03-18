@@ -47,8 +47,11 @@ The frontend now includes:
 
 - A QRide navbar and ride-request hero section
 - A post-hero "Explore what you can do with QRide" section
+- Routed pages for `/home`, `/login`, `/register`, `/ride`, and `/captain`
 - Login and signup forms connected to Spring Boot auth APIs
+- Captain login/signup flow connected to dedicated `/api/captain/*` endpoints
 - Pickup and dropoff autocomplete backed by the location module
+- Ride request creation, ride estimates, and a captain dashboard for open ride requests
 
 ## Quality Gates
 
@@ -75,9 +78,18 @@ Useful backend APIs:
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+- `POST /api/captain/register`
+- `POST /api/captain/login`
+- `GET /api/location/suggestions?q=<query>`
+- `GET /api/location/coordinates?q=<query>`
+- `GET /api/location/distance-time?origin=<origin>&destination=<destination>`
 - `GET /api/locations/search?q=<query>`
 - `POST /api/rides`
+- `POST /api/rides/create`
 - `GET /api/rides/me`
+- `GET /api/rides/user`
+- `GET /api/rides/captain`
+- `GET /api/rides/open`
 - `PUT /api/drivers/me`
 - `PATCH /api/drivers/me/availability`
 

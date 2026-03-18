@@ -31,9 +31,31 @@ public class RideController {
         return ResponseEntity.ok(rideService.createRide(authentication.getName(), request));
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<RideResponse> createRideLegacy(
+            Authentication authentication,
+            @Valid @RequestBody CreateRideRequest request) {
+        return ResponseEntity.ok(rideService.createRide(authentication.getName(), request));
+    }
+
     @GetMapping("/me")
     public ResponseEntity<List<RideResponse>> getMyRides(Authentication authentication) {
         return ResponseEntity.ok(rideService.getMyRides(authentication.getName()));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<RideResponse>> getUserRides(Authentication authentication) {
+        return ResponseEntity.ok(rideService.getMyRides(authentication.getName()));
+    }
+
+    @GetMapping("/captain")
+    public ResponseEntity<List<RideResponse>> getCaptainRides(Authentication authentication) {
+        return ResponseEntity.ok(rideService.getMyRides(authentication.getName()));
+    }
+
+    @GetMapping("/open")
+    public ResponseEntity<List<RideResponse>> getOpenRides() {
+        return ResponseEntity.ok(rideService.getOpenRides());
     }
 
     @GetMapping("/{rideId}")

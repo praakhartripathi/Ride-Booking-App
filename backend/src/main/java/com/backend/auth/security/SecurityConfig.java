@@ -36,7 +36,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/api/auth/**").permitAll()
+                           .requestMatchers("/api/captain/**").permitAll()
                            .requestMatchers(HttpMethod.GET, "/api/locations/**").permitAll()
+                           .requestMatchers(HttpMethod.GET, "/api/location/**").permitAll()
                            .requestMatchers(HttpMethod.GET, "/api/users/profile-pictures/**").permitAll()
                                 .anyRequest().authenticated()
                 )

@@ -11,6 +11,7 @@ import com.backend.auth.repository.UserRepository;
 import com.backend.auth.security.CustomUserDetails;
 import com.backend.auth.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,6 +61,12 @@ public class AuthService {
         return mapToDto(user, accessToken, refreshToken);
     }
 
+    @Transactional
+    public AuthResponse registerDriver(RegisterRequest request) {
+        request.setRole(Role.DRIVER);
+        return register(request);
+    }
+
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -83,6 +90,14 @@ public class AuthService {
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .build();
+    }
+
+    public AuthResponse loginDriver(LoginRequest request) {
+        AuthResponse response = login(request);
+        if (!Role.DRIVER.name().equals(response.getRole())) {
+            throw new AccessDeniedException("Only drivers can use captain login");
+        }
+        return response;
     }
 
     public void logout(String authHeader, LogoutRequest request) {

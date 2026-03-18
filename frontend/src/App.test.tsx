@@ -4,6 +4,7 @@ import App from './App'
 
 describe('App', () => {
   it('renders the qride homepage flow', () => {
+    window.history.pushState({}, '', '/home')
     render(<App />)
 
     expect(screen.getByRole('banner')).toBeInTheDocument()

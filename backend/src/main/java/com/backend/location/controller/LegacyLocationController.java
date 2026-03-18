@@ -14,18 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping("/api/location")
 @RequiredArgsConstructor
-public class LocationController {
+public class LegacyLocationController {
 
     private final LocationService locationService;
-
-    @GetMapping("/search")
-    public ResponseEntity<List<LocationSuggestionResponse>> searchLocations(
-            @RequestParam("q") String query,
-            @RequestParam(value = "limit", required = false) Integer limit) {
-        return ResponseEntity.ok(locationService.searchLocations(query, limit));
-    }
 
     @GetMapping("/suggestions")
     public ResponseEntity<List<LocationSuggestionResponse>> getSuggestions(
